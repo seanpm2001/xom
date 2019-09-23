@@ -1,0 +1,17 @@
+{
+    "name": "medienreaktor/xom",
+    "description": "xom",
+    "license": "GPL-3.0",
+    "authors": [
+        {
+            "name": "medienreaktor GmbH",
+            "email": "info@medienreaktor.de"
+        }
+    ],
+    "type": "typo3-cms-extension",
+    "autoload": {
+        "psr-4": {
+            "Medienreaktor\\Xom\\": "Classes/"
+        }
+    }
+}

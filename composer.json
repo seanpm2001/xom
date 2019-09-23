@@ -1,6 +1,6 @@
 {
     "name": "medienreaktor/xom",
-    "description": "xom",
+    "description": "Provides service classes to work with the xom REST API.",
     "license": "GPL-3.0",
     "authors": [
         {

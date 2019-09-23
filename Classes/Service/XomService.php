@@ -32,20 +32,20 @@ class XomService implements \TYPO3\CMS\Core\SingletonInterface
 		$this->configuration = $configuration;
 	}
 
-	protected function apiCall($method, $identifier = NULL, $params = [], $localized = TRUE, $cached = TRUE)
+	protected function apiCall($uri, $identifier = NULL, $params = [], $localized = TRUE, $cached = TRUE, $method = 'GET')
 	{
         if ( ! $params['format']) $params['format'] = 'object';
 		if ($localized) $params['locale'] = $this->getLocale();
 
 		if ($cached) {
-			$cacheIdentifier = $this->calculateCacheIdentifier([$method, $identifier, $params], self::CACHE_PREFIX_REQUEST, TRUE);
+			$cacheIdentifier = $this->calculateCacheIdentifier([$uri, $identifier, $params], self::CACHE_PREFIX_REQUEST, TRUE);
 
 			if ($this->cache->get($cacheIdentifier)) {
 	            return $this->cache->get($cacheIdentifier);
 	        }
 		}
 
-        $response = $this->rawApiCall($method, $identifier, $params);
+        $response = $this->rawApiCall($uri, $identifier, $params, $method);
 
         if ($response) {
             $response = json_decode($response, TRUE);
@@ -60,23 +60,23 @@ class XomService implements \TYPO3\CMS\Core\SingletonInterface
         return FALSE;
 	}
 
-    protected function rawApiCall($method, $identifier = NULL, $params = [])
+    protected function rawApiCall($uri, $identifier = NULL, $params = [], $method = 'GET')
     {
         if (isset($identifier)) {
             $identifier = rawurlencode($identifier);
-            $method = str_replace('{id}', $identifier, $method);
+            $uri = str_replace('{id}', $identifier, $uri);
         } else {
-			// method contains {id}, but identifier is not set
-			if (strpos($method, '{id}') !== FALSE) {
+			// uri contains {id}, but identifier is not set
+			if (strpos($uri, '{id}') !== FALSE) {
 				return FALSE;
 			}
 		}
 
         try {
             $params['access_token'] = $this->getToken();
-            $uri = $this->configuration['apiEndpoint'].$method.'?'.http_build_query($params);
+            $uri = $this->configuration['apiEndpoint'].$uri.'?'.http_build_query($params);
 
-            $response = $this->requestFactory->request($uri, 'GET');
+            $response = $this->requestFactory->request($uri, $method);
 
             if (200 === $response->getStatusCode()) {
                 $contents = $response->getBody()->getContents();

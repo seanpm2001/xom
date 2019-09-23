@@ -65,12 +65,12 @@ namespace YourVendor\XomProducts\Controller;
 class ProductController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 {
     /**
-	 * xomProductsService
-	 *
-	 * @var \YourVendor\XomProducts\Service\XomProductsService
-	 * @TYPO3\CMS\Extbase\Annotation\Inject
-	 */
-	protected $xomProductsService = NULL;
+     * xomProductsService
+     *
+     * @var \YourVendor\XomProducts\Service\XomProductsService
+     * @TYPO3\CMS\Extbase\Annotation\Inject
+     */
+    protected $xomProductsService = NULL;
 
     /**
      * action list
